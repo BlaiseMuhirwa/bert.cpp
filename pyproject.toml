@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "bert-cpp"
+version = "0.1.0"
+description = "Training BERT"
+authors = ["Your Name <you@example.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+packages = [{include = "bert"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+black = "^24.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
