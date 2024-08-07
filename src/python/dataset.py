@@ -10,7 +10,7 @@ import numpy as np
 import tqdm
 from collections import Counter
 import os
-import logging 
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class BertDataset(Dataset):
         mask_pctg: Optional[float] = None,
         chunk_range: Optional[tuple] = None,
         should_include_text: bool = False,
-        serialize_tokenized_dataset: bool = False
+        serialize_tokenized_dataset: bool = False,
     ):
         self.ds: pd.Series = pd.read_csv(data_path)["review"]
         if chunk_range:
@@ -84,7 +84,7 @@ class BertDataset(Dataset):
         token_mask = torch.tensor(item[self.TOKEN_MASK_COLUMN]).bool()
 
         mask_target = torch.tensor(item[self.TARGET_COLUMN]).long()
-        # Directly set all non-masked tokens to 0 
+        # Directly set all non-masked tokens to 0
         mask_target = mask_target.masked_fill_(token_mask, 0)
         attention_mask = (input == self.vocab[self.PAD]).unsqueeze(0)
 
@@ -251,7 +251,7 @@ if __name__ == "__main__":
         data_path=os.path.join(os.getcwd(), "data/IMDB Dataset.csv"),
         # chunk_range=(0, 10),
         should_include_text=True,
-        serialize_tokenized_dataset=True
+        serialize_tokenized_dataset=True,
     )
     stce = ["[CLS]", "this", "works", "[MASK]", "well"]
     indices = dataset.vocab.lookup_indices(stce)

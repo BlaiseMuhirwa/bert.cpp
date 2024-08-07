@@ -5,3 +5,6 @@ data
 # Don't include serialized artifacts during training
 artifacts
 src/python/explore.ipynb
+
+# caches 
+src/python/__pycache__
