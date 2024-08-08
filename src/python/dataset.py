@@ -194,12 +194,11 @@ class BertDataset(Dataset):
     def _preprocess_sentence(
         self, sentence: list[str], apply_mask: bool = True
     ) -> tuple:
-        inverse_token_mask = None
+        inverse_token_mask = []
         if apply_mask:
             sentence, inverse_token_mask = self._mask_sentence(sentence)
-        inverse_token_mask = [True] + inverse_token_mask if inverse_token_mask else None
         sentence, inverse_token_mask = self._pad_sentence(
-            [self.CLS] + sentence, inverse_token_mask
+            [self.CLS] + sentence, [True] + inverse_token_mask
         )
         return sentence, inverse_token_mask
 

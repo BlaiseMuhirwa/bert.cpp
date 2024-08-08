@@ -9,8 +9,11 @@ import os
 import time
 from datetime import datetime
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+device = torch.device(
+    "cuda"
+    if torch.cuda.is_available()
+    else ("mps" if torch.backends.mps.is_available() else "cpu")
+)
 
 def percentage(batch_size: int, max_index: int, current_index: int):
     """
@@ -111,6 +114,7 @@ class Trainer:
         start = time.time()
         avg_nsp_loss, avg_mlm_loss = 0, 0
         for i, value in enumerate(self.data_loader):
+            index = i + 1
             input, mask, inverse_token_mask, token_target, nsp_target = value
             self.optimizer.zero_grad()
 
@@ -130,13 +134,13 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
-            if i + 1 % self._print_prog_every == 0:
+            if index % self._print_prog_every == 0:
                 elapsed = time.gmtime(time.time() - start)
                 summary = self.training_summary(
                     elapsed, i + 1, avg_nsp_loss, avg_mlm_loss
                 )
 
-                if i + 1 % self._print_acc_every == 0:
+                if index % self._print_acc_every == 0:
                     summary += self.acc_summary(
                         i + 1, token, nsp, token_target, nsp_target, inverse_token_mask
                     )
